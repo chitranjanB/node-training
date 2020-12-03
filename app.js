@@ -32,7 +32,16 @@ emitter.emit("log", {
   body: { message: "success", timestamp: "12/12/20" },
 });
 
-const { log } = require("./logger");
+//Logger is EventEmitter
+const { Logger } = require("./logger");
 
-// event raised
-log("new log");
+const logger = new Logger();
+
+//we declare what to do here
+logger.on("event", function (arg) {
+  //send this log to elasticsearch or cloud api
+  console.log("event has raised", arg);
+});
+
+//send the log here
+logger.log("some log");
