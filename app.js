@@ -22,7 +22,7 @@ const emitter = new EventEmitter();
 
 //event declaration should be first in the order
 emitter.on("log", function (arg) {
-  console.log("event has raised", arg);
+  // console.log("event has raised", arg);
 });
 
 // event raised
@@ -31,3 +31,8 @@ emitter.emit("log", {
   url: "http://abc.com/log",
   body: { message: "success", timestamp: "12/12/20" },
 });
+
+const { log } = require("./logger");
+
+// event raised
+log("new log");
