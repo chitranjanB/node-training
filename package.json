@@ -1,0 +1,27 @@
+{
+  "name": "first-app",
+  "version": "1.0.0",
+  "description": "Training for NodeJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chitranjanB/node-training.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "chitranjanbabu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chitranjanB/node-training/issues"
+  },
+  "homepage": "https://github.com/chitranjanB/node-training#readme",
+  "dependencies": {
+    "mongoose": "^5.11.2",
+    "underscore": "^1.12.0"
+  }
+}
