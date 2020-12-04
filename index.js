@@ -14,7 +14,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/api/courses", function (req, res) {
-  res.send([1, 2, 3]);
+  res.send(courses);
 });
 
 app.get("/api/courses/:id", function (req, res) {
@@ -29,24 +29,18 @@ app.get("/api/courses/:id", function (req, res) {
 });
 
 app.post("/api/courses", function (req, res) {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-  const result = schema.validate(req.body);
+  const result = validateCourse(req.body);
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
   }
 
   const newCourse = { id: courses.length + 1, name: req.body.name };
   courses = [...courses, newCourse];
-  res.status(201).send(newCourse);
+  res.send(newCourse);
 });
 
 app.put("/api/courses/:id", function (req, res) {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-  const result = schema.validate(req.body);
+  const result = validateCourse(req.body);
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
   }
@@ -61,7 +55,7 @@ app.put("/api/courses/:id", function (req, res) {
 
   courses = courses.map((c) => (c.id === updatedCourse.id ? updatedCourse : c));
   console.log("courses after update ", courses);
-  res.status(200).send(updatedCourse);
+  res.send(updatedCourse);
 });
 
 app.get("/api/posts/:year/:month", function (req, res) {
@@ -76,3 +70,11 @@ const port = process.env.PORT;
 app.listen(port, function () {
   console.log(`Listening on ${port}`);
 });
+
+function validateCourse(course) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+  const result = schema.validate(course);
+  return result;
+}
