@@ -1,9 +1,10 @@
-const { json } = require("body-parser");
 const express = require("express");
+const Joi = require("joi");
 
 const app = express();
+app.use(express.json());
 
-const courses = [
+let courses = [
   { id: 1, name: "NodeJs Course" },
   { id: 2, name: "React Course" },
 ];
@@ -25,6 +26,20 @@ app.get("/api/courses/:id", function (req, res) {
   } else {
     res.status(404).send(`No Course exists by id ${id}`);
   }
+});
+
+app.post("/api/courses", function (req, res) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+  const result = schema.validate(req.body);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+  }
+
+  const newCourse = { id: courses.length + 1, name: req.body.name };
+  courses = [...courses, newCourse];
+  res.status(201).send(newCourse);
 });
 
 app.get("/api/posts/:year/:month", function (req, res) {
