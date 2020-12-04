@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/chitranjanB/node-training#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "mongoose": "^5.11.2",
     "underscore": "^1.12.0"
   },
