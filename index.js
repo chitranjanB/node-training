@@ -31,7 +31,7 @@ app.get("/api/courses/:id", function (req, res) {
 app.post("/api/courses", function (req, res) {
   const result = validateCourse(req.body);
   if (result.error) {
-    res.status(400).send(result.error.details[0].message);
+    return res.status(400).send(result.error.details[0].message);
   }
 
   const newCourse = { id: courses.length + 1, name: req.body.name };
@@ -42,20 +42,32 @@ app.post("/api/courses", function (req, res) {
 app.put("/api/courses/:id", function (req, res) {
   const result = validateCourse(req.body);
   if (result.error) {
-    res.status(400).send(result.error.details[0].message);
+    return res.status(400).send(result.error.details[0].message);
   }
 
   const courseId = req.params.id;
   let updatedCourse = { id: parseInt(courseId), name: req.body.name };
   const course = courses.find((c) => c.id === parseInt(updatedCourse.id));
   if (!course) {
-    res.status(404).send(`No Course exists by id ${courseId}`);
-    return;
+    return res.status(404).send(`No Course exists by id ${courseId}`);
   }
 
   courses = courses.map((c) => (c.id === updatedCourse.id ? updatedCourse : c));
   console.log("courses after update ", courses);
   res.send(updatedCourse);
+});
+
+app.delete("/api/courses/:id", function (req, res) {
+  const id = parseInt(req.params.id);
+
+  const course = courses.find((c) => c.id === id);
+  if (!course) {
+    return res.status(404).send(`No Course exists by id ${id}`);
+  }
+
+  courses = courses.filter((c) => c.id !== id);
+  console.log(courses);
+  res.send("success");
 });
 
 app.get("/api/posts/:year/:month", function (req, res) {
