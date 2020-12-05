@@ -1,3 +1,4 @@
+const config = require("config");
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -8,7 +9,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./public"));
 
-app.use(morgan("tiny"));
+console.log("Application name is ", config.get("name"));
+console.log("Mail server is ", config.get("mail.host"));
+
+console.log("current env is", app.get("env"));
+
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("morgan enabled...");
+}
+
 app.use(helmet());
 
 app.use(require("./logger"));
@@ -92,11 +102,6 @@ app.get("/api/users", function (req, res) {
   res.send(req.query);
 });
 
-const port = process.env.PORT;
-app.listen(port, function () {
-  console.log(`Listening on ${port}`);
-});
-
 function validateCourse(course) {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
@@ -104,3 +109,8 @@ function validateCourse(course) {
   const result = schema.validate(course);
   return result;
 }
+
+const port = process.env.PORT;
+app.listen(port, function () {
+  console.log(`Listening on ${port}`);
+});
