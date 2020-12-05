@@ -1,9 +1,8 @@
 console.log("before");
 
 getUser(1, function (user) {
-  console.log(user);
   getRepos(user.githubUser, function (repos) {
-    console.log(repos);
+    getCommits(repos[0], function (commits) {});
   });
 });
 console.log("after");
@@ -23,5 +22,13 @@ function getRepos(username, callback) {
     console.log("Fetching repos for user", username);
     const repos = ["repo1", "repo2"];
     callback(repos);
+  }, 2000);
+}
+
+function getCommits(repo, callback) {
+  setTimeout(function () {
+    console.log("Fetching commits for repo", repo);
+    const commits = ["commit1", "commit2"];
+    callback(commits);
   }, 2000);
 }
