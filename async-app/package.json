@@ -1,0 +1,29 @@
+{
+  "name": "async-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chitranjanB/node-training.git"
+  },
+  "keywords": [
+    "js",
+    "node",
+    "async-await",
+    "promises",
+    "callback"
+  ],
+  "author": "chitranjanbabu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chitranjanB/node-training/issues"
+  },
+  "homepage": "https://github.com/chitranjanB/node-training#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
