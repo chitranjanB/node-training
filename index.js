@@ -1,15 +1,18 @@
+const startupDebugger = require("debug")("app:startup");
+const dbDebugger = require("debug")("app:db");
 const config = require("config");
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const Joi = require("joi");
-const startupDebugger = require("debug")("app:startup");
-const dbDebugger = require("debug")("app:db");
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./public"));
+
+app.set("view engine", "pug");
+app.set("views", "./views");
 
 console.log("Application name is ", config.get("name"));
 console.log("Mail server is ", config.get("mail.host"));
@@ -37,7 +40,7 @@ let courses = [
 ];
 
 app.get("/", function (req, res) {
-  res.send("Hello World!");
+  res.render("index", { title: "pug tutorial", message: "Hello" });
 });
 
 app.get("/api/courses", function (req, res) {
