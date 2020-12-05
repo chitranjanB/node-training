@@ -3,7 +3,8 @@ console.log("before");
 getUser(1)
   .then((user) => getRepos(user.githubUser))
   .then((repos) => getCommits(repos[0]))
-  .then((commits) => console.log("commits", commits));
+  .then((commits) => console.log("commits", commits))
+  .catch((err) => console.log(err));
 
 console.log("after");
 
