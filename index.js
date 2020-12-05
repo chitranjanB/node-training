@@ -3,6 +3,8 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const Joi = require("joi");
+const startupDebugger = require("debug")("app:startup");
+const dbDebugger = require("debug")("app:db");
 
 const app = express();
 app.use(express.json());
@@ -16,8 +18,9 @@ console.log("current env is", app.get("env"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.log("morgan enabled...");
+  startupDebugger("morgan enabled...");
 }
+dbDebugger("connected to database...");
 
 app.use(helmet());
 
