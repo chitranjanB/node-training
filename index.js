@@ -1,8 +1,22 @@
 const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
 const Joi = require("joi");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("./public"));
+
+app.use(morgan("tiny"));
+app.use(helmet());
+
+app.use(require("./logger"));
+
+app.use(function (req, res, next) {
+  console.log("Authenticating...");
+  next();
+});
 
 let courses = [
   { id: 1, name: "NodeJs Course" },
