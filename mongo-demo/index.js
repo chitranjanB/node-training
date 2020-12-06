@@ -85,7 +85,24 @@ async function getCourse() {
   const regexQuery4 = await Course.find({ author: /Mosh/i });
   console.log("regex query case sensitive", regexQuery4);
   console.log("************************************");
+
+  //count
+  let count = await Course.find()
+    .limit(2)
+    .sort({ date: -1 }) // sort by most recent
+    .countDocuments(); // select only date and name
+  console.log("Count query result", count);
+  console.log("************************************");
 }
 
 // createCourse();
 getCourse();
+
+async function getCoursePage(pageNumber, pageSize) {
+  let page = await Course.find()
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
+  console.log("retrieve by page", page);
+  console.log("************************************");
+}
+getCoursePage(1, 10);
