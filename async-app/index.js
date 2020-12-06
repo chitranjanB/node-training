@@ -1,10 +1,21 @@
 console.log("before");
 
+//Promise based approach
 getUser(1)
   .then((user) => getRepos(user.githubUser))
   .then((repos) => getCommits(repos[0]))
-  .then((commits) => console.log("commits", commits))
+  .then((commits) => console.log("promise based commits", commits))
   .catch((err) => console.log(err));
+
+//Async-await based appraoch
+displayCommits(1);
+
+async function displayCommits(userid) {
+  const user = await getUser(userid);
+  const repos = await getRepos(user.githubUser);
+  const commits = await getCommits(repos[0]);
+  console.log("async await based commits", commits);
+}
 
 console.log("after");
 
