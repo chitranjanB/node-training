@@ -7,12 +7,15 @@ mongoose
   .then(() => console.log("connected to mongodb"))
   .catch(() => console.log("connection failed"));
 
-const genreSchema = mongoose.Schema({
-  id: Number,
-  name: String,
-});
-
-const Genre = mongoose.model("Genre", genreSchema);
+const Genre = mongoose.model(
+  "Genre",
+  mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+    },
+  })
+);
 
 const router = express.Router();
 
@@ -26,7 +29,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const genreData = new Genre({
-    id: req.body.id,
     name: req.body.name,
   });
 
@@ -35,35 +37,27 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const genreObj = await Genre.findOne({ id: req.params.id });
-  if (!genreObj)
-    return res.status(404).send("The genre with the given ID was not found.");
-
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  genreObj.name = req.body.name;
-  const updated = await Genre.updateOne(
-    { id: genreObj.id },
-    {
-      $set: { name: genreObj.name },
-    }
+  const genre = await Genre.findByIdAndUpdate(
+    req.params.id,
+    { name: req.body.name },
+    { new: true }
   );
-  res.send(genreObj);
+  res.send(genre);
 });
 
 router.delete("/:id", async (req, res) => {
-  const genre = await Genre.find({ id: req.params.id });
+  const genre = await Genre.findByIdAndDelete(req.params.id);
   if (!genre)
     return res.status(404).send("The genre with the given ID was not found.");
-
-  await Genre.deleteOne({ id: req.params.id });
 
   res.send(genre);
 });
 
 router.get("/:id", async (req, res) => {
-  const genre = await Genre.find({ id: req.params.id });
+  const genre = await Genre.findById(req.params.id);
   if (!genre)
     return res.status(404).send("The genre with the given ID was not found.");
   res.send(genre);
@@ -71,7 +65,6 @@ router.get("/:id", async (req, res) => {
 
 function validateGenre(genre) {
   const schema = {
-    id: Joi.number(),
     name: Joi.string().min(3).required(),
   };
 
