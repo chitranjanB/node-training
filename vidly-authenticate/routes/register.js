@@ -4,15 +4,6 @@ const router = express.Router();
 const asyncMiddleware = require("../middlewares/asyncMiddleware");
 const { User, validateUser } = require("../models/user");
 
-function asyncMiddleware(handler) {
-  return async function (req, res, next) {
-    try {
-      await handler(req, res);
-    } catch (err) {
-      next(err);
-    }
-  };
-}
 router.post(
   "/",
   asyncMiddleware(async function (req, res) {
