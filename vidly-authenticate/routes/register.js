@@ -1,6 +1,7 @@
 const express = require("express");
 const _ = require("lodash");
 const router = express.Router();
+const asyncMiddleware = require("../middlewares/asyncMiddleware");
 const { User, validateUser } = require("../models/user");
 
 function asyncMiddleware(handler) {
