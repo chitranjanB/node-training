@@ -13,12 +13,21 @@ process.on("uncaughtException", function (ex) {
   console.log("Exception caught... Process won't terminate");
 });
 
+process.on("unhandledRejection", function (ex) {
+  console.log("Unhandled rejection", ex);
+});
+
 mongoose
   .connect("mongodb://localhost/vidly")
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB..."));
 
-throw new Error("Simulate uncaught error while startup");
+//throw new Error("Simulate uncaught error while startup");
+//This will be only catched if you have unhandledRejection event handler on process
+async function rejecting() {
+  const p = await Promise.reject(new Error("unhandled promise"));
+}
+rejecting();
 
 app.use(express.json());
 app.use("/api/genres", genres);
