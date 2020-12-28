@@ -10,13 +10,9 @@ router.post(
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    try {
-      let user = new User(_.pick(req.body, ["name", "email", "password"]));
-      user = await user.save();
-      res.send(user);
-    } catch (error) {
-      next(error);
-    }
+    let user = new User(_.pick(req.body, ["name", "email", "password"]));
+    user = await user.save();
+    res.send(user);
   })
 );
 
