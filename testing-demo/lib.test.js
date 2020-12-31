@@ -4,7 +4,12 @@ const {
   getCurrencies,
   getProduct,
   registerUser,
+  applyDiscount,
+  notifyCustomer,
 } = require("./lib");
+
+const db = require("./db");
+const mail = require("./mail");
 
 describe("absolute", () => {
   it("should return positive number, given input as positive number", () => {
@@ -58,5 +63,38 @@ describe("registerUser", () => {
     expect(result).toHaveProperty("username");
     expect(result.username).toBe("chitranjan");
     expect(result.id).toBeGreaterThan(0);
+  });
+});
+
+describe("applyDiscount", () => {
+  it("should apply discount correctly", () => {
+    db.getCustomerSync = (id) => {
+      console.log("Mocked getCustomerSync function");
+      return { id: id, points: 11 };
+    };
+    const order = { customerId: 1, totalPrice: 100 };
+    applyDiscount(order);
+  });
+});
+
+describe("notifyCustomer", () => {
+  it("should notify customer", () => {
+    db.getCustomerSync = jest.fn().mockReturnValue({ email: "email" });
+    mail.send = jest.fn().mockReturnValue();
+
+    const order = { customerId: 1, totalPrice: 100 };
+    notifyCustomer(order);
+
+    expect(mail.send).toBeCalledWith(
+      "email",
+      "Your order was placed successfully."
+    );
+
+    //Matching email name - match
+    expect(mail.send.mock.calls[0][0]).toBe("email");
+    //Matching the calls with args - match
+    expect(mail.send.mock.calls[0][1]).toMatch(/order/);
+
+    expect(mail.send).toBeCalledTimes(1);
   });
 });
